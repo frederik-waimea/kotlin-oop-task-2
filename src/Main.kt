@@ -143,14 +143,17 @@ class Gnome(val name: String, var strength: Int) {
      *   NAME: dead!
      */
     fun info(): String {
-        return ""
+        if (!alive()) {
+            return "$name: dead!"
+        }
+        return "$name: strength $strength, health $health"
     }
 
     /**
      * A gnome is alive if its health > zero
      */
     fun alive(): Boolean {
-        return false
+        return (health > 0)
     }
 
     /**
@@ -161,8 +164,8 @@ class Gnome(val name: String, var strength: Int) {
      */
     fun train(numHours: Int) {
         println("$name trains for $numHours hours...")
-
-
+       // numHours.div(2)
+        strength =(strength + numHours.div(2)).coerceIn(1, 10)
     }
 
     /**
@@ -174,8 +177,15 @@ class Gnome(val name: String, var strength: Int) {
      */
     fun fight(opponent: Gnome) {
         println("$name vs ${opponent.name}...")
+        val oppAlive = opponent.alive()
+        val isAlive = alive()
 
-
+        if (oppAlive) {
+            this.health = (this.health - 5 * opponent.strength).coerceIn(0, 100)
+        }
+        if (isAlive) {
+            opponent.health = (opponent.health - 5 * this.strength).coerceIn(0, 100)
+        }
     }
 
 }
